@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NestJS Chat Bot</title>
+</head>
+<body>
+  <div id="chat">
+    <ul id="messages"></ul>
+    <input id="messageInput" autocomplete="off" /><button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value;
+      input.value = '';
+
+      socket.emit('message', message);
+    }
+
+    socket.on('message', (data) => {
+      const messages = document.getElementById('messages');
+      const li = document.createElement('li');
+      li.appendChild(document.createTextNode('${data.id}: ${data.message}'));
+      messages.appendChild(li);
+    });
+  </script>
+</body>
+</html>
+<!--{data.id}: ${data.message}-->
